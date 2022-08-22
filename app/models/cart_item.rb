@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CartItem
   attr_reader :product_id, :quantity
 
@@ -14,7 +16,7 @@ class CartItem
     Product.find(@product_id)
   end
 
-  def total_price(item=self)
+  def total_price(item = self)
     item.quantity * item.product.price
   end
 end

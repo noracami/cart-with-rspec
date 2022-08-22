@@ -1,26 +1,28 @@
+# frozen_string_literal: true
+
 class Cart
   def initialize(items = [])
     @items = items
   end
 
   def to_hash
-    items = @items.map { |item|
-      {"product_id" => item.product_id,
-      "quantity" => item.quantity}
-    }
+    items = @items.map do |item|
+      { 'product_id' => item.product_id,
+        'quantity' => item.quantity }
+    end
 
-    {"items" => items}
+    { 'items' => items }
   end
 
   def self.from_hash(hash = nil)
     items = []
 
-    if hash.is_a?(Hash) && hash["items"]
-      items = hash["items"].map do |item|
-        CartItem.new(item["product_id"], item["quantity"])
+    if hash.is_a?(Hash) && hash['items']
+      items = hash['items'].map do |item|
+        CartItem.new(item['product_id'], item['quantity'])
       end
     end
-    
+
     Cart.new(items)
   end
 
@@ -35,14 +37,12 @@ class Cart
       @items << CartItem.new(product_id, quantity)
     end
   end
-  
+
   def empty?
     @items.empty?
   end
 
-  def items
-    @items
-  end
+  attr_reader :items
 
   def total_price
     # @items.reduce(0) do |memo, item|
@@ -50,14 +50,10 @@ class Cart
     # end
     total = @items.sum(&:total_price)
 
-    if is_Xmas?
-      total = (total * 0.9).floor
-    end
+    total = (total * 0.9).floor if is_Xmas?
 
-    if total > 1000
-      total = total - 100
-    end
-    
+    total -= 100 if total > 1000
+
     total
   end
 
